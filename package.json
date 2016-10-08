@@ -1,0 +1,28 @@
+{
+    "author": "johnxlw@gmail.com",
+    "dependencies": {},
+    "keywords": [],
+    "name": "basic-time",
+    "pebble": {
+        "displayName": "Basic Time",
+        "enableMultiJS": true,
+        "messageKeys": [],
+        "projectType": "native",
+        "resources": {
+            "media": [
+                {
+                    "file": "fonts/04B_19__.TTF",
+                    "name": "BIT_FONT_48",
+                    "targetPlatforms": null,
+                    "type": "font"
+                }
+            ]
+        },
+        "sdkVersion": "3",
+        "uuid": "7e2733de-0759-4696-8c7e-bece9655b8db",
+        "watchapp": {
+            "watchface": false
+        }
+    },
+    "version": "1.0.0"
+}
