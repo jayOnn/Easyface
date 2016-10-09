@@ -1,16 +1,7 @@
-#include <pebble.h>
+#include "Easy_face.h"
 #include "src/c/battery.h"
+#include "src/c/bluetooth.h"
 
-static Window *s_main_window;
-static TextLayer *s_time_layer;
-static GFont s_time_font;
-
-static TextLayer *s_date_layer;
-static GFont s_date_font;
-
-extern void battery_callback(BatteryChargeState state);
-extern void battery_update_proc(Layer *layer, GContext *ctx);
-extern Layer *s_battery_layer;
 
 static void update_time() {
   // Get a tm structure
@@ -45,6 +36,8 @@ static void main_window_load(Window *window) {
 
 	
 	s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_BIT_FONT_48));
+
+	
   // Improve the layout to be more like a watchface
   text_layer_set_background_color(s_time_layer, GColorBlack);
   text_layer_set_text_color(s_time_layer, GColorWhite);
@@ -67,10 +60,18 @@ static void main_window_load(Window *window) {
 	s_battery_layer = layer_create(GRect(0,0,1,168));
 	layer_set_update_proc(s_battery_layer, battery_update_proc);
 	
+	// Bluetooth Layer
+	s_bt_bitmap = gbitmap_create_with_resource(RESOURCE_ID_BT_ICON);
+	s_bt_layer = bitmap_layer_create(GRect(123, 1, 20, 20));
+	bitmap_layer_set_bitmap(s_bt_layer, s_bt_bitmap);
+	bluetooth_callback(connection_service_peek_pebble_app_connection());
+	
+	
   // Add it as a child layer to the Window's root layer
   layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
 	layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
 	layer_add_child(window_layer, s_battery_layer);
+	layer_add_child(window_layer, bitmap_layer_get_layer(s_bt_layer));
 }
 
 static void main_window_unload(Window *window) {
@@ -80,6 +81,8 @@ static void main_window_unload(Window *window) {
 	text_layer_destroy(s_date_layer);
 	fonts_unload_custom_font(s_date_font);
 	layer_destroy(s_battery_layer);
+	gbitmap_destroy(s_bt_bitmap);
+	bitmap_layer_destroy(s_bt_layer);
 }
 
 
@@ -108,6 +111,9 @@ static void init() {
   // Register to Service
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
 	battery_state_service_subscribe(battery_callback);
+	connection_service_subscribe((ConnectionHandlers){
+		.pebble_app_connection_handler = bluetooth_callback
+	});
 	
 }
 
