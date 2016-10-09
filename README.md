@@ -8,3 +8,7 @@ Features:
 - Easy to read 
 - Battery Indicator
 
+
+Version 1.0 
+- initial launch
+
