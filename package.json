@@ -11,6 +11,12 @@
         "resources": {
             "media": [
                 {
+                    "file": "fonts/GeosansLight.ttf",
+                    "name": "GEO_SANS_LIGHT_18",
+                    "targetPlatforms": null,
+                    "type": "font"
+                },
+                {
                     "file": "fonts/04B_19__.TTF",
                     "name": "BIT_FONT_48",
                     "targetPlatforms": null,
